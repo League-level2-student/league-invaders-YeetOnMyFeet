@@ -13,6 +13,7 @@ public class LeagueInvaders {
 	gameFrame.setVisible(true);
 	gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	gameFrame.add(gamePanel);
+	gameFrame.addKeyListener(gamePanel);
 	}
 public static void main(String[] args) {
 SwingUtilities.invokeLater(new Runnable() {
