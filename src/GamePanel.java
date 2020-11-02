@@ -5,7 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -18,7 +20,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	    Font titleFont;
 	    Font titleFont2;
 	    Timer frameDraw;
+	    Timer alienSpawn;
 	    RocketShip rocket = new RocketShip(250, 700, 50, 50);
+	    ObjectManager manager = new ObjectManager(rocket);
+	    public static BufferedImage image;
+	    public static boolean needImage = true;
+	    public static boolean gotImage = false;	
 public GamePanel() {
 	titleFont = new Font("Arial", Font.PLAIN, 48);
 	titleFont2 = new Font("Times New Roman", Font.PLAIN, 32);
@@ -35,12 +42,30 @@ public GamePanel() {
 		}else if(currentState == END){
 		    drawEndState(g);
 		}}
-	
+	void loadImage(String imageFile) {
+	    if (needImage) {
+	        try {
+	            image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
+		    gotImage = true;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        needImage = false;
+	    }
+	}
+public void startGame() {
+	 alienSpawn = new Timer(1000 , manager);
+	 alienSpawn.start();
+	 manager.aliens.clear();
+	 
+}
 public void	 updateMenuState() { 
 	
 }
 public void	 updateGameState() {  
 	rocket.update();
+	manager.update();
+	
 }
 public void	 updateEndState()  {  
 	
@@ -57,9 +82,13 @@ public void drawMenuState(Graphics g) {
 	g.drawString("Press SPACE for instructions", 60, 550);
 }
 public void drawGameState(Graphics g) { 
-	g.setColor(Color.BLACK);
-	g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
-	rocket.draw(g);
+	if (needImage) {
+	    loadImage ("space.png");
+	}
+	//g.setColor(Color.BLACK);
+	g.drawImage(image,0, 0, null);
+	//g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
+	manager.draw(g);
 }
 public void drawEndState(Graphics g)  { 
 	g.setColor(Color.RED);
@@ -97,12 +126,19 @@ public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
 	if (e.getKeyCode()==KeyEvent.VK_ENTER) {
 		System.out.println("ENTER");
+		startGame();
 	    if (currentState == END) {
 	        currentState = MENU;
+	        alienSpawn.stop();
+	        
 	    } else {
 	        currentState++;
 	    }
 	} 
+	if (e.getKeyCode()==KeyEvent.VK_SPACE) {
+		System.out.println("Space");
+		manager.addProjectile(rocket.getProjectile());
+	}
 	if (e.getKeyCode()==KeyEvent.VK_UP) {
 	    System.out.println("UP");
 	    rocket.up = true;
