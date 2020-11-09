@@ -65,7 +65,9 @@ public void	 updateMenuState() {
 public void	 updateGameState() {  
 	rocket.update();
 	manager.update();
-	
+	if (rocket.isActive == false) {
+		currentState = END;
+	}
 }
 public void	 updateEndState()  {  
 	
@@ -89,6 +91,10 @@ public void drawGameState(Graphics g) {
 	g.drawImage(image,0, 0, null);
 	//g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
 	manager.draw(g);
+	manager.getScore();
+	g.setColor(Color.YELLOW);
+	g.setFont(titleFont);
+	g.drawString("" + manager.getScore(), 50, 80);
 }
 public void drawEndState(Graphics g)  { 
 	g.setColor(Color.RED);
@@ -97,7 +103,7 @@ public void drawEndState(Graphics g)  {
 	g.setColor(Color.BLACK);
 	g.drawString("Game Over", 110, 100);
 	g.setFont(titleFont2);
-	g.drawString("You killed " + ""+ "enemies", 100, 350);
+	g.drawString("You killed " + ""+ + manager.getScore() + " enemies", 100, 350);
 	g.setFont(titleFont2);
 	g.drawString("Press ENTER to start", 100, 550);
 	
@@ -129,30 +135,28 @@ public void keyPressed(KeyEvent e) {
 		startGame();
 	    if (currentState == END) {
 	        currentState = MENU;
+	        rocket = new RocketShip(250, 700, 50, 50);
+	        manager = new ObjectManager(rocket);
 	        alienSpawn.stop();
+	        
 	        
 	    } else {
 	        currentState++;
 	    }
 	} 
 	if (e.getKeyCode()==KeyEvent.VK_SPACE) {
-		System.out.println("Space");
 		manager.addProjectile(rocket.getProjectile());
 	}
 	if (e.getKeyCode()==KeyEvent.VK_UP) {
-	    System.out.println("UP");
 	    rocket.up = true;
 	}
 	if (e.getKeyCode()==KeyEvent.VK_LEFT) {
-	    System.out.println("LEFT");
 	    rocket.left = true;
 	}
 	if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
-	    System.out.println("RIGHT");
 	    rocket.right= true;
 	}
 	if (e.getKeyCode()==KeyEvent.VK_DOWN) {
-	    System.out.println("DOWN");
 	    rocket.down= true;
 	}
 }

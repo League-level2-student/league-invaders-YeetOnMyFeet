@@ -83,5 +83,10 @@ public void update() {
 	if (down) {
 		down();
 	}
+	super.update();
+}
+public void setIsActive(boolean b) {
+	// TODO Auto-generated method stub
+	this.isActive = b;
 }
 }

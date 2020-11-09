@@ -13,7 +13,7 @@ public class Projectile extends GameObject{
 		// TODO Auto-generated constructor stub
 		speed = 10;
 		if (needImage) {
-		    loadImage ("alien.png");
+		    loadImage ("bullet.png");
 		}
 	}
 	void loadImage(String imageFile) {
@@ -29,6 +29,7 @@ public class Projectile extends GameObject{
 	}
 	public void update() {
 		y-=speed;
+        super.update();
 	}
 	public void draw(Graphics g) {
         if (gotImage) {
@@ -39,5 +40,8 @@ public class Projectile extends GameObject{
 	}
 	
 }
-	
+	public void setIsActive(boolean b) {
+		// TODO Auto-generated method stub
+		this.isActive = b;
+	}
 }
